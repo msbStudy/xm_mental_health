@@ -1,0 +1,46 @@
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.mapper.SideshowMapper">
+
+    <select id="selectAll" resultType="com.example.entity.Sideshow">
+        select sideshow.*, propagate.title as propagateTitle from `sideshow`
+        left join propagate on sideshow.propagate_id = propagate.id
+        <where>
+            <if test="propagateTitle != null"> and propagate.title like concat('%', #{propagateTitle}, '%')</if>
+        </where>
+    </select>
+
+    <delete id="deleteById">
+        delete from `sideshow`
+        where id = #{id}
+    </delete>
+
+    <insert id="insert" parameterType="com.example.entity.Sideshow" useGeneratedKeys="true">
+        insert into `sideshow`
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">id,</if>
+            <if test="img != null">img,</if>
+            <if test="propagateId != null">propagate_id,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">#{id},</if>
+            <if test="img != null">#{img},</if>
+            <if test="propagateId != null">#{propagateId},</if>
+        </trim>
+    </insert>
+
+    <update id="updateById" parameterType="com.example.entity.Sideshow">
+        update `sideshow`
+        <set>
+            <if test="img != null">
+                img = #{img},
+            </if>
+            <if test="propagateId != null">
+                propagate_id = #{propagateId},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+
+</mapper>
