@@ -21,3 +21,12 @@ mybatis:
   mapper-locations: classpath:mapper/*.xml
 
 fileBaseUrl: http://localhost:${server.port}
+
+logging:
+  level:
+    # 降低 MyBatis 核心包的日志级别，减少 SQL 等详细信息的输出
+    org.mybatis: WARN
+    # 降低数据库连接池 HikariCP 的日志级别
+    com.zaxxer.hikari: WARN
+    # 配置你自己的业务包路径，提高其日志级别，以便显示操作相关的数据信息
+    com.example: INFO  #项目的实际主包名

@@ -1,4 +1,14 @@
 import { createRouter, createWebHistory } from 'vue-router'
+import AIModule from '../views/AIModule.vue';
+
+const routes = [
+    // 其他已有路由
+    {
+        path: '/ai-module',
+        name: 'AIModule',
+        component: AIModule
+    }
+];
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),

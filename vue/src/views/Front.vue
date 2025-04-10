@@ -13,6 +13,8 @@
           <el-menu-item index="/front/propagate">心理健康宣传</el-menu-item>
           <el-menu-item index="/front/feedback">反馈与建议</el-menu-item>
           <el-menu-item index="/front/person">个人中心</el-menu-item>
+          <!-- 其他菜单项 -->
+          <el-menu-item index="/ai-module">心理Ai咨询</el-menu-item>
         </el-menu>
       </div>
       <div class="front-header-right">
