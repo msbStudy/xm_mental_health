@@ -71,7 +71,10 @@
             <artifactId>volcengine-java-sdk-ark-runtime</artifactId>
             <version>LATEST</version>
         </dependency>
+
+
     </dependencies>
+
 
     <build>
         <plugins>

@@ -97,7 +97,7 @@ const sendQuestion = async () => {
   if (question.value.trim() === '') return;
 
   try {
-    const response = await axios.post("/ai/ask", { question: question.value });
+    const response = await axios.post("/ai/ask", question.value);
     answer.value = response.data.data;
   } catch (error) {
     console.error('请求出错:', error);
