@@ -58,7 +58,8 @@ const router = createRouter({
     { path: '/login', component: () => import('@/views/Login.vue') },
     { path: '/register', component: () => import('@/views/Register.vue') },
     { path: '/404', component: () => import('@/views/404.vue') },
-    { path: '/:pathMatch(.*)', redirect: '/404' }
+    { path: '/:pathMatch(.*)', redirect: '/404' },
+    {path: '/ai-module', name: 'AIModule', component: AIModule} // 添加ai模块的路由配置
   ]
 })
 

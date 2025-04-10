@@ -240,7 +240,7 @@ let pieOptions = {
         {value: 735, name: '雀巢咖啡'},
         {value: 580, name: '星巴克咖啡'},
         {value: 484, name: '栖巢咖啡'},
-        {value: 300, name: '小武哥咖啡'}
+        {value: 300, name: '诺瓦咖啡'}
       ]
     }
   ]
