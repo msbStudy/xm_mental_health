@@ -45,7 +45,7 @@ public class AiController {
             return Result.success(answer);
         } catch (Exception e) {
             e.printStackTrace();
-            return Result.error("请求火山引擎 AI 出错");
+            return Result.error("请求火山引擎大模型AI 出错");
         }
     }
 }
