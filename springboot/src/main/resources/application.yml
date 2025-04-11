@@ -30,3 +30,5 @@ logging:
     com.zaxxer.hikari: WARN
     # 配置你自己的业务包路径，提高其日志级别，以便显示操作相关的数据信息
     com.example: INFO  #项目的实际主包名
+    com.volcengine.ark: DEBUG
+    okhttp3: DEBUG
