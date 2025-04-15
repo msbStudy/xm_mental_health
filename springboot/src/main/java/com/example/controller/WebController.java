@@ -46,7 +46,7 @@ public class WebController {
     }
 
     /**
-     * 注册
+     * 注册模块
      */
     @PostMapping("/register")
     public Result register(@RequestBody Account account) {

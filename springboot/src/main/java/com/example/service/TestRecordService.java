@@ -45,7 +45,8 @@ public class TestRecordService {
         testRecord.setUserId(currentUser.getId());
         testRecord.setTime(DateUtil.now());
 
-        // 计算用户获得的总分数：遍历topicList里面的每一个题目，把用户的答案和ABCD四个答案做比较，选中的是哪个就算哪个选项的分数
+        // 计算用户获得的总分数：遍历topicList里面的每一个题目，把用户的答案和ABCD四个答案做比较，
+        // 选中的是哪个就算哪个选项的分数
         Integer score = 0;
         for (Topic topic : topicList) {
             String userAnswer = topic.getUserAnswer();

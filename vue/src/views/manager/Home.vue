@@ -129,7 +129,7 @@ let lineOptions = {
   },
   legend: {
     data: [],
-    template:""
+    template: ""
   },
   grid: {
     left: '3%',
@@ -156,12 +156,12 @@ let lineOptions = {
       type: 'line',
       smooth: true,
       markLine: {
-        data: [{ type: 'average', name: '心理测试次数平均值' }]
+        data: [{type: 'average', name: '心理测试次数平均值'}]
       },
       markPoint: {
         data: [
-          { type: 'max', name: '最大值' },
-          { type: 'min', name: '最小值' }
+          {type: 'max', name: '最大值'},
+          {type: 'min', name: '最小值'}
         ]
       },
     },
@@ -174,8 +174,8 @@ let barOptions = {
     subtext: '统计维度：心理分类', // 副标题
     left: 'center'
   },
-  grid : {   // ---------------------------增加这个属性，bottom就是距离底部的距离
-    bottom : '30%'
+  grid: {   // ---------------------------增加这个属性，bottom就是距离底部的距离
+    bottom: '30%'
   },
   legend: {
     orient: 'vertical',
@@ -187,8 +187,10 @@ let barOptions = {
     name: '疫苗名称',
     axisLabel: {
       show: true, // 是否显示刻度标签，默认显示
-      interval: 0, // 坐标轴刻度标签的显示间隔，在类目轴中有效；默认会采用标签不重叠的策略间隔显示标签；可以设置成0强制显示所有标签；如果设置为1，表示『隔一个标签显示一个标签』，如果值为2，表示隔两个标签显示一个标签，以此类推。
-      rotate: -60, // 刻度标签旋转的角度，在类目轴的类目标签显示不下的时候可以通过旋转防止标签之间重叠；旋转的角度从-90度到90度
+      interval: 0, // 坐标轴刻度标签的显示间隔，在类目轴中有效；默认会采用标签不重叠的策略间隔显示标签；
+      // 可以设置成0强制显示所有标签；如果设置为1，表示『隔一个标签显示一个标签』，如果值为2，表示隔两个标签显示一个标签，以此类推。
+      rotate: -60, // 刻度标签旋转的角度，在类目轴的类目标签显示不下的时候可以通过旋转防止标签之间重叠；
+                   // 旋转的角度从-90度到90度
       inside: false, // 刻度标签是否朝内，默认朝外
       margin: 6, // 刻度标签与轴线之间的距离
     },

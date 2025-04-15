@@ -26,6 +26,11 @@ public class UserService {
     @Resource
     private UserMapper userMapper;
 
+    public void register(Account account) {
+        User user = new User();
+        BeanUtils.copyProperties(account, user);
+        add(user);
+    }
     public void add(User user) {
         User dbUser = userMapper.selectByUsername(user.getUsername());
         if (ObjectUtil.isNotNull(dbUser)) {
@@ -101,9 +106,5 @@ public class UserService {
         userMapper.updateById(dbUser);
     }
 
-    public void register(Account account) {
-        User user = new User();
-        BeanUtils.copyProperties(account, user);
-        add(user);
-    }
+
 }

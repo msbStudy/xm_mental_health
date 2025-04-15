@@ -5,6 +5,7 @@
       <span style="margin-left: 20px">满分：{{ data.testPaper.score }}</span>
     </div>
     <div style="margin-top: 20px; padding: 0 40px">
+      <!-- 题目展示和答题选项 -->
       <div v-for="(item, index) in data.testPaper.topicList" style="margin-bottom: 10px">
         <div style="line-height: 20px; background-color: #ddf1fc; padding: 5px">{{index + 1}}、{{ item.title }}</div>
         <div style="margin-top: 10px">

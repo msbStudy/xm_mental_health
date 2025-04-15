@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
-import java.util.List;  
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
@@ -29,9 +29,9 @@ public class AiController {
     // 日志记录器
     private static final Logger logger = LoggerFactory.getLogger(AiController.class);
 
-    // 火山引擎API配置常量
-    private static final String API_KEY = "6f6c971d-7ae4-477d-99a0-24ac062cfe4f";
-    private static final String BOT_ID = "bot-20250410102443-mj9rx";
+    // 从环境变量中获取火山引擎API Key
+    private static final String API_KEY = System.getenv("ARK_API_KEY");
+    private static final String BOT_ID = "<bot-20250410102443-mj9rx>";
 
     // OKHttp连接池配置
     private static ConnectionPool connectionPool = new ConnectionPool(5, 1, TimeUnit.SECONDS);
@@ -66,7 +66,7 @@ public class AiController {
 
             // 3. 构建火山引擎请求
             BotChatCompletionRequest request = BotChatCompletionRequest.builder()
-                    .botId(BOT_ID)
+                    .model(BOT_ID)
                     .messages(messages)
                     .temperature(0.7)  // 控制生成随机性
                     .maxTokens(1000)    // 最大响应长度

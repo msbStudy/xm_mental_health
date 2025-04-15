@@ -39,7 +39,6 @@
     <div class="card" v-if="data.total">
       <el-pagination @current-change="load" background layout="prev, pager, next" :page-size="data.pageSize" v-model:current-page="data.pageNum" :total="data.total" />
     </div>
-
     <el-dialog title="心理健康宣传信息" v-model="data.formVisible" width="50%" destroy-on-close>
       <el-form ref="form" :model="data.form" label-width="70px" style="padding: 20px">
         <el-form-item prop="title" label="宣传标题">
@@ -181,6 +180,7 @@ const save = () => {
   data.form.id ? update() : add()
 }
 
+
 const del = (id) => {
   ElMessageBox.confirm('删除后数据无法恢复，您确定删除吗？', '删除确认', { type: 'warning' }).then(res => {
     request.delete('/propagate/delete/' + id).then(res => {
@@ -195,6 +195,7 @@ const del = (id) => {
     console.error(err)
   })
 }
+
 const delBatch = () => {
   if (!data.ids.length) {
     ElMessage.warning("请选择数据")

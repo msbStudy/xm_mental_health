@@ -2,7 +2,8 @@
   <div style="min-height: 500px; width: 70%; margin: 20px auto">
     <div class="card" style="font-size: 20px">心理测试记录</div>
     <div class="card" style="margin-top: 10px">
-      <el-input v-model="data.testPaperName" prefix-icon="Search" style="width: 240px; margin-right: 10px" placeholder="请输入试卷名称查询"></el-input>
+      <el-input v-model="data.testPaperName" prefix-icon="Search" style="width: 240px;
+       margin-right: 10px" placeholder="请输入试卷名称查询"></el-input>
       <el-button type="info" plain @click="load">查询</el-button>
       <el-button type="warning" plain style="margin: 0 10px" @click="reset">重置</el-button>
     </div>
@@ -25,7 +26,8 @@
       </el-table>
     </div>
     <div class="card" v-if="data.total" style="margin-top: 10px">
-      <el-pagination @current-change="load" background layout="prev, pager, next" :page-size="data.pageSize" v-model:current-page="data.pageNum" :total="data.total" />
+      <el-pagination @current-change="load" background layout="prev, pager, next"
+                     :page-size="data.pageSize" v-model:current-page="data.pageNum" :total="data.total" />
     </div>
   </div>
 </template>

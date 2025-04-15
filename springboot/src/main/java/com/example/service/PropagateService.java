@@ -32,7 +32,6 @@ public class PropagateService {
         Account currentUser = TokenUtils.getCurrentUser();
         propagate.setDoctorId(currentUser.getId());
         propagate.setTime(DateUtil.now());
-//        propagate.setNum(0);
         propagateMapper.insert(propagate);
     }
 

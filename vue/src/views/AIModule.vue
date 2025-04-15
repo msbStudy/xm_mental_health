@@ -46,7 +46,7 @@
       </div>
     </div>
 
-    <!-- 修改后的AI对话框部分 -->
+    <!-- AI对话框部分 -->
     <div class="ai-module-container">
       <div class="ai-dialog-wrapper">
         <div class="ai-dialog">
@@ -56,7 +56,6 @@
               新对话
             </el-button>
           </div>
-
           <div class="dialog-content" ref="chatContainer">
             <!-- 消息历史记录 -->
             <div v-for="(msg, index) in messages" :key="index"
@@ -65,14 +64,12 @@
                 {{ msg.content }}
               </div>
             </div>
-
             <!-- 加载状态指示 -->
             <div v-if="loading" class="loading-indicator">
               <el-icon class="is-loading"><Loading /></el-icon>
               <span>AI正在思考中...</span>
             </div>
           </div>
-
           <!-- 输入区域 -->
           <div class="dialog-input">
             <el-input
@@ -108,8 +105,37 @@
           <div style="padding: 5px 0">38,000+ 心理测试试卷</div>
         </div>
         <div style="flex: 1;margin-top: 20px">
-          <!-- 可以添加更多底部信息 -->
+          <div style="padding: 10px 0;font-size: 18px">关于我们</div>
+          <div style="padding: 5px 0">关于心理健康预约系统联系我们</div>
+          <div style="padding: 5px 0">隐私政策商标声明</div>
+          <div style="padding: 5px 0">服务协议</div>
+          <div style="padding: 5px 0">心理健康预约系统服务协议</div>
+          <div style="padding: 5px 0">网络信息侵权通知指引</div>
+          <div style="padding: 5px 0">心理健康预约系统服务监督员</div>
+          <div style="padding: 5px 0">网站地图加入心理健康预约系统</div>
         </div>
+        <div style="flex: 1;margin-top: 20px">
+          <div style="padding: 10px 0;font-size: 18px">心理咨询服务</div>
+          <div style="display: flex">
+            <div style="flex: 1;padding: 10px 0">心理咨询</div>
+            <div style="flex: 1;padding: 5px 0">心理检测</div>
+          </div>
+          <div style="display: flex">
+            <div style="flex: 1;padding: 10px 0">医生问答</div>
+            <div style="flex: 1;padding: 5px 0">心理答疑</div>
+          </div>
+          <div style="display: flex">
+            <div style="flex: 1;padding: 10px 0">心理调节</div>
+            <div style="flex: 1;padding: 5px 0">心理问卷</div>
+          </div>
+          <div style="display: flex">
+            <div style="flex: 1;padding: 10px 0">APP下载</div>
+
+          </div>
+        </div>
+      </div>
+      <div style="width: 100%;text-align: center;color: #c2c2c2;margin-top: 40px;font-size: 20px">
+        没有人是一座孤岛，每个人都需要关注心理健康
       </div>
     </div>
   </div>

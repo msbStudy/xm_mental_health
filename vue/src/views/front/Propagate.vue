@@ -29,7 +29,8 @@
       </div>
     </div>
     <div class="card" v-if="data.total">
-      <el-pagination @current-change="loadPropagate" background layout="total, prev, pager, next" :page-size="data.pageSize" v-model:current-page="data.pageNum" :total="data.total" />
+      <el-pagination @current-change="loadPropagate" background layout="total, prev, pager, next"
+                     :page-size="data.pageSize" v-model:current-page="data.pageNum" :total="data.total" />
     </div>
   </div>
 </template>

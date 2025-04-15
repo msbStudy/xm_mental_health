@@ -18,7 +18,6 @@ public class PropagateController {
 
     @Resource
     private PropagateService propagateService;
-
     /**
      * 新增
      */

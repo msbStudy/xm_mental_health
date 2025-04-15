@@ -2,6 +2,7 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.example.mapper.TestRecordMapper">
+    <update id="updateById"></update>
 
     <select id="selectAll" resultType="com.example.entity.TestRecord">
         select test_record.*, user.name as userName, test_paper.title as testPaperName, doctor.name as doctorName, type.title as typeName from `test_record`

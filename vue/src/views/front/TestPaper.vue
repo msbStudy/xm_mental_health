@@ -2,13 +2,16 @@
   <div style="min-height: 500px; width: 60%; margin: 20px auto">
     <div class="card">
       <el-button :class="{'button_active' : data.typeName === null}" @click="loadTestPaper(null)">全部</el-button>
-      <el-button :class="{'button_active' : data.typeName === item.title}" v-for="item in data.typeData" @click="loadTestPaper(item.title)">{{ item.title }}</el-button>
+      <el-button :class="{'button_active' : data.typeName === item.title}" v-for="item in data.typeData"
+                 @click="loadTestPaper(item.title)">{{ item.title }}</el-button>
     </div>
     <div class="card" style="margin-top: 10px; display: flex" v-for="item in data.testPaperData">
+      <!-- 试卷信息展示 -->
       <div style="flex: 1; margin-right: 20px">
         <div style="font-size: 18px">{{ item.title }}</div>
         <div style="margin-top: 10px; color: #666666; line-height: 20px; height: 60px" class="line3">{{ item.content }}</div>
         <div style="margin-top: 20px; display: flex; align-items: center">
+          <!-- 医生信息、测试人数、发布时间、分类等信息展示 -->
           <img :src="item.doctorAvatar" alt="" style="width: 20px; height: 20px; border-radius: 50%">
           <div style="margin-left: 5px">{{ item.doctorName }}</div>
           <el-icon style="margin-left: 20px" size="large"><EditPen /></el-icon>
@@ -38,6 +41,7 @@ const data = reactive({
 })
 
 const loadType = () => {
+  // 获取心理分类数据
   request.get('/type/selectAll').then(res => {
     if (res.code === '200') {
       data.typeData = res.data
@@ -49,6 +53,7 @@ const loadType = () => {
 }
 
 const loadTestPaper = (typeName) => {
+  // 根据分类名称获取试卷列表
   data.typeName = typeName
   request.get('/testPaper/selectAll', {
     params: {
@@ -64,6 +69,7 @@ const loadTestPaper = (typeName) => {
 }
 
 const navTo = (url) => {
+  // 跳转到试卷详情页面
   location.href = url
 }
 
