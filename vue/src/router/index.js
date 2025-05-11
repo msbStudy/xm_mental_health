@@ -1,14 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import AIModule from '../views/AIModule.vue';
-
-const routes = [
-    // 其他已有路由
-    {
-        path: '/ai-module',
-        name: 'AIModule',
-        component: AIModule
-    }
-];
+import AIModule from '@/views/front/AIModule.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -53,13 +44,13 @@ const router = createRouter({
         { path: 'testPaper', component: () => import('@/views/front/TestPaper.vue'),  },
         { path: 'testPaperDetail', component: () => import('@/views/front/TestPaperDetail.vue'),  },
         { path: 'testRecord', component: () => import('@/views/front/TestRecord.vue'),  },
+        { path: 'ai-module', component: () => import('@/views/front/AIModule.vue'),  }
       ]
     },
     { path: '/login', component: () => import('@/views/Login.vue') },
     { path: '/register', component: () => import('@/views/Register.vue') },
     { path: '/404', component: () => import('@/views/404.vue') },
     { path: '/:pathMatch(.*)', redirect: '/404' },
-    {path: '/ai-module', name: 'AIModule', component: AIModule} // 添加ai模块的路由配置
   ]
 })
 

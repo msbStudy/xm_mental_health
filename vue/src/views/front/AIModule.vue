@@ -1,51 +1,5 @@
 <template>
   <div>
-    <!-- 头部导航栏，样式参考 Front.vue -->
-    <div class="front-header">
-      <div class="front-header-left">
-        <img src="@/assets/imgs/logo.png" alt="">
-        <div class="title">心理健康预约系统</div>
-      </div>
-      <div class="front-header-center">
-        <el-menu :default-active="router.currentRoute.value.path" router mode="horizontal">
-          <el-menu-item index="/front/home">首页</el-menu-item>
-          <el-menu-item index="/front/testPaper">心理测试</el-menu-item>
-          <el-menu-item index="/front/doctor">心理医生</el-menu-item>
-          <el-menu-item index="/front/propagate">心理健康宣传</el-menu-item>
-          <el-menu-item index="/front/feedback">反馈与建议</el-menu-item>
-          <el-menu-item index="/front/person">个人中心</el-menu-item>
-          <!-- 其他菜单项 -->
-          <el-menu-item index="/ai-module">心理AI咨询</el-menu-item>
-        </el-menu>
-      </div>
-      <div class="front-header-right">
-        <div v-if="!data.user.id">
-          <el-button @click="router.push('/login')">登录</el-button>
-          <el-button @click="router.push('/register')">注册</el-button>
-        </div>
-        <div v-else>
-          <el-dropdown style="cursor: pointer; height: 60px">
-            <div style="display: flex; align-items: center">
-              <img style="width: 40px; height: 40px; border-radius: 50%;" :src="data.user.avatar" alt="">
-              <span style="margin-left: 5px;">{{ data.user.name }}</span>
-              <el-icon>
-                <arrow-down/>
-              </el-icon>
-            </div>
-            <template #dropdown>
-              <el-dropdown-menu>
-                <el-dropdown-item @click="navTo('/front/reservation')">预约记录</el-dropdown-item>
-                <el-dropdown-item @click="navTo('/front/testRecord')">测试记录</el-dropdown-item>
-                <el-dropdown-item @click="navTo('/front/myFeedback')">我的反馈</el-dropdown-item>
-                <el-dropdown-item @click="navTo('/front/password')">修改密码</el-dropdown-item>
-                <el-dropdown-item @click="logout">退出登录</el-dropdown-item>
-              </el-dropdown-menu>
-            </template>
-          </el-dropdown>
-        </div>
-      </div>
-    </div>
-
     <!-- AI对话框部分 -->
     <div class="ai-module-container">
       <div class="ai-dialog-wrapper">
@@ -145,7 +99,7 @@
 import { ref, reactive, onMounted, nextTick } from 'vue'
 import { ElMessage, ElIcon } from 'element-plus'
 import { Promotion, Loading } from '@element-plus/icons-vue'
-import router from '@/router'
+import router from '@/router/index.js'
 import axios from 'axios'
 
 const data = reactive({
@@ -162,6 +116,9 @@ const sendQuestion = async () => {
   try {
     loading.value = true;
 
+    // 打印 Token
+    const token = localStorage.getItem('token');
+    console.log('Token:', token);
     // 添加用户消息
     messages.value.push({
       role: 'user',
@@ -169,13 +126,15 @@ const sendQuestion = async () => {
       timestamp: new Date().toLocaleTimeString()
     });
 
-    const response = await axios.post('/ai/ask', {
-      question: question.value
-    }, {
+    // 发送请求
+    // const response = await axios.post(`${import.meta.env.VITE_BASE_URL}/ai/ask`, { question: question.value },
+    const response = await axios.post(`http://localhost:8080/ai/ask`, { question: question.value },
+        {
       headers: {
-        'Authorization': `Bearer ${localStorage.getItem('token')}`
+        'Authorization': `Bearer ${token}`
       }
     });
+    console.log('Response Data:', response.data);
 
     // 处理成功响应
     if (response.data.code === 200) {

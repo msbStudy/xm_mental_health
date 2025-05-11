@@ -1,8 +1,5 @@
 package com.example.controller;
 
-import okhttp3.OkHttpClient;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import com.example.common.Result;
 import com.volcengine.ark.runtime.model.bot.completion.chat.BotChatCompletionRequest;
 import com.volcengine.ark.runtime.model.bot.completion.chat.BotChatCompletionResult;
@@ -11,111 +8,85 @@ import com.volcengine.ark.runtime.model.completion.chat.ChatMessageRole;
 import com.volcengine.ark.runtime.service.ArkService;
 import okhttp3.ConnectionPool;
 import okhttp3.Dispatcher;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.RestTemplate;
 
-import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
-/**
- * AI控制器类，处理与AI相关的HTTP请求
- */
 @RestController
 @RequestMapping("/ai")
 @CrossOrigin
 public class AiController {
-    // 日志记录器
+
     private static final Logger logger = LoggerFactory.getLogger(AiController.class);
 
-    // 从环境变量中获取火山引擎API Key
     private static final String API_KEY = System.getenv("ARK_API_KEY");
-    private static final String BOT_ID = "<bot-20250410102443-mj9rx>";
 
-    // OKHttp连接池配置
-    private static ConnectionPool connectionPool = new ConnectionPool(5, 1, TimeUnit.SECONDS);
-    private static Dispatcher dispatcher = new Dispatcher();
-
-    // 初始化ArkService实例
-    static ArkService service = ArkService.builder()
-            .dispatcher(dispatcher)
-            .connectionPool(connectionPool)
-            .baseUrl("https://ark.cn-beijing.volces.com/api/v3/")
-            .apiKey(API_KEY)
-            .build();
+    private static final String BOT_ID = "bot-20250410102443-mj9rx";
 
     /**
-     * 处理用户提问的POST请求
+     * 调用火山引擎 API 获取回答
      *
      * @param params 包含用户问题的参数
-     * @param session 当前会话
-     * @return AI的回答结果封装在Result对象中
+     * @return AI 的回答
      */
     @PostMapping("/ask")
-    public Result ask(@RequestBody Map<String, String> params, HttpSession session) {
+    public Result ask(@RequestBody Map<String, String> params) {
+        String question = params.get("question");
+        logger.info("收到用户   提问: {}", question);
+
         try {
-            // 1. 获取或初始化对话历史
-            List<ChatMessage> messages = getSessionMessages(session);
+            // 构造请求体
+            Map<String, Object> requestBody = new HashMap<>();
+            requestBody.put("model", BOT_ID); // 模型 ID
+            requestBody.put("stream", false); // 不启用流式返回
+            Map<String, Object> streamOptions = new HashMap<>();
+            streamOptions.put("include_usage", true);
+            requestBody.put("stream_options", streamOptions);
 
-            // 2. 添加用户消息
-            messages.add(ChatMessage.builder()
-                    .role(ChatMessageRole.USER)
-                    .content(params.get("question"))
-                    .build());
+            // 构造消息内容
+            List<Map<String, String>> messages = new ArrayList<>();
+            Map<String, String> userMessage = new HashMap<>();
+            userMessage.put("role", "user");
+            userMessage.put("content", question);
+            messages.add(userMessage);
+            requestBody.put("messages", messages);
 
-            // 3. 构建火山引擎请求
-            BotChatCompletionRequest request = BotChatCompletionRequest.builder()
-                    .model(BOT_ID)
-                    .messages(messages)
-                    .temperature(0.7)  // 控制生成随机性
-                    .maxTokens(1000)    // 最大响应长度
-                    .build();
+            // 构造请求头
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.APPLICATION_JSON);
+            headers.set("Authorization", "Bearer " + API_KEY);
 
-            // 4. 调用火山引擎API
-            BotChatCompletionResult result = service.createBotChatCompletion(request);
+            // 发送 POST 请求
+            HttpEntity<Map<String, Object>> requestEntity = new HttpEntity<>(requestBody, headers);
+            RestTemplate restTemplate = new RestTemplate();
+            String url = "https://ark.cn-beijing.volces.com/api/v3/bots/chat/completions";
+            ResponseEntity<Map> response = restTemplate.postForEntity(url, requestEntity, Map.class);
 
-            // 5. 处理响应
-            String answer = result.getChoices().get(0).getMessage().getContent().toString();
 
-            // 6. 保存对话历史
-            messages.add(ChatMessage.builder()
-                    .role(ChatMessageRole.ASSISTANT)
-                    .content(answer)
-                    .build());
-            session.setAttribute("chatHistory", messages);
+            // 解析响应
+            Map responseBody = response.getBody();
+            assert responseBody != null;
+            List<Map<String, Object>> choices = (List<Map<String, Object>>) responseBody.get("choices");
+            String answer = (String) choices.get(0).get("message");
+            logger.info("火山引擎返回的 choices 内容: {}", choices);
 
+            logger.info("火山引擎返回答案: {}", answer);
             return Result.success(answer);
+
         } catch (Exception e) {
-            logger.error("火山引擎调用失败", e);
-            return Result.error("AI服务暂时不可用：" + e.getMessage());
+            logger.error("调用火山引擎失败", e);
+            return Result.error("AI 服务暂时不可用: " + e.getMessage());
         }
     }
-
-    /**
-     * 从会话中获取对话历史，如果不存在则初始化
-     *
-     * @param session 当前会话
-     * @return 对话历史列表
-     */
-    private List<ChatMessage> getSessionMessages(HttpSession session) {
-        List<ChatMessage> messages = (List<ChatMessage>) session.getAttribute("chatHistory");
-        if (messages == null) {
-            messages = new ArrayList<>();
-            // 系统初始化提示词
-            messages.add(ChatMessage.builder()
-                    .role(ChatMessageRole.SYSTEM)
-                    .content("你是一个专业的心理健康助手，用中文以温暖、关怀的语气回答问题")
-                    .build());
-        }
-        return messages;
-    }
-
-    // OKHttp客户端实例，用于HTTP请求
-    private static final OkHttpClient OK_HTTP_CLIENT = new OkHttpClient.Builder()
-            .connectTimeout(10, TimeUnit.SECONDS)
-            .readTimeout(30, TimeUnit.SECONDS)
-            .writeTimeout(30, TimeUnit.SECONDS)
-            .connectionPool(new ConnectionPool(20, 5, TimeUnit.MINUTES))
-            .build();
 }
