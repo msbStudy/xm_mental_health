@@ -1,13 +1,7 @@
 package com.example.controller;
 
 import com.example.common.Result;
-import com.volcengine.ark.runtime.model.bot.completion.chat.BotChatCompletionRequest;
-import com.volcengine.ark.runtime.model.bot.completion.chat.BotChatCompletionResult;
-import com.volcengine.ark.runtime.model.completion.chat.ChatMessage;
-import com.volcengine.ark.runtime.model.completion.chat.ChatMessageRole;
-import com.volcengine.ark.runtime.service.ArkService;
-import okhttp3.ConnectionPool;
-import okhttp3.Dispatcher;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpEntity;
