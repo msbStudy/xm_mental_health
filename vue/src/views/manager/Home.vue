@@ -75,6 +75,14 @@ const loadBaseData = () => {
     }
   })
 }
+// 预加载数据
+loadBaseData()
+onMounted(() => {
+  loadLine()
+  loadBar()
+  loadPie()
+})
+
 const loadLine = () => {
   request.get('/statistics/line').then(res => {
     if (res.code === '200') {
@@ -113,12 +121,7 @@ const loadPie = () => {
     }
   })
 }
-loadBaseData()
-onMounted(() => {
-  loadLine()
-  loadBar()
-  loadPie()
-})
+
 
 
 // 平滑折线图
@@ -184,9 +187,9 @@ let barOptions = {
   xAxis: {
     type: 'category',
     data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'], // 示例数据：统计的维度（横坐标）
-    name: '疫苗名称',
+    name: '心理分类',
     axisLabel: {
-      show: true, // 是否显示刻度标签，默认显示
+      show: true, // 是否显示刻度标  签，默认显示
       interval: 0, // 坐标轴刻度标签的显示间隔，在类目轴中有效；默认会采用标签不重叠的策略间隔显示标签；
       // 可以设置成0强制显示所有标签；如果设置为1，表示『隔一个标签显示一个标签』，如果值为2，表示隔两个标签显示一个标签，以此类推。
       rotate: -60, // 刻度标签旋转的角度，在类目轴的类目标签显示不下的时候可以通过旋转防止标签之间重叠；
