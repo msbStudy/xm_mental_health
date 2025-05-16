@@ -6,9 +6,6 @@
         <div class="ai-dialog">
           <div class="dialog-header">
             <h2>心理AI咨询</h2>
-            <el-button type="primary" size="small" @click="newChat" :disabled="loading">
-              新对话
-            </el-button>
           </div>
           <div class="dialog-content" ref="chatContainer">
             <!-- 消息历史记录 -->
@@ -46,52 +43,6 @@
         </div>
       </div>
     </div>
-
-    <!-- 底部黑色部分，样式和内容参考 Front.vue -->
-    <div style="background-color: #3c3c3c;height: 400px;">
-      <div style="width: 50%;margin: 0 auto;display: flex;color: #c2c2c2">
-        <div style="flex: 1;margin-top: 20px">
-          <div style="padding: 10px 0;font-size: 18px">心理健康预约系统</div>
-          <div style="padding: 5px 0">上亿心理医生共同打造的"心理健康"</div>
-          <div style="padding: 5px 0">60,000 多次心理咨询次数</div>
-          <div style="padding: 5px 0">600,000 个细分分类</div>
-          <div style="padding: 5px 0">760,000,000 次心理测试</div>
-          <div style="padding: 5px 0">38,000+ 心理测试试卷</div>
-        </div>
-        <div style="flex: 1;margin-top: 20px">
-          <div style="padding: 10px 0;font-size: 18px">关于我们</div>
-          <div style="padding: 5px 0">关于心理健康预约系统联系我们</div>
-          <div style="padding: 5px 0">隐私政策商标声明</div>
-          <div style="padding: 5px 0">服务协议</div>
-          <div style="padding: 5px 0">心理健康预约系统服务协议</div>
-          <div style="padding: 5px 0">网络信息侵权通知指引</div>
-          <div style="padding: 5px 0">心理健康预约系统服务监督员</div>
-          <div style="padding: 5px 0">网站地图加入心理健康预约系统</div>
-        </div>
-        <div style="flex: 1;margin-top: 20px">
-          <div style="padding: 10px 0;font-size: 18px">心理咨询服务</div>
-          <div style="display: flex">
-            <div style="flex: 1;padding: 10px 0">心理咨询</div>
-            <div style="flex: 1;padding: 5px 0">心理检测</div>
-          </div>
-          <div style="display: flex">
-            <div style="flex: 1;padding: 10px 0">医生问答</div>
-            <div style="flex: 1;padding: 5px 0">心理答疑</div>
-          </div>
-          <div style="display: flex">
-            <div style="flex: 1;padding: 10px 0">心理调节</div>
-            <div style="flex: 1;padding: 5px 0">心理问卷</div>
-          </div>
-          <div style="display: flex">
-            <div style="flex: 1;padding: 10px 0">APP下载</div>
-
-          </div>
-        </div>
-      </div>
-      <div style="width: 100%;text-align: center;color: #c2c2c2;margin-top: 40px;font-size: 20px">
-        没有人是一座孤岛，每个人都需要关注心理健康
-      </div>
-    </div>
   </div>
 </template>
 
@@ -100,12 +51,13 @@ import { ref, reactive, onMounted, nextTick } from 'vue'
 import { ElMessage, ElIcon } from 'element-plus'
 import { Promotion, Loading } from '@element-plus/icons-vue'
 import router from '@/router/index.js'
+import request from '@/utils/request' // 假设你的request文件在这里
+
 import axios from 'axios'
 
 const data = reactive({
   user: JSON.parse(localStorage.getItem('xm-user') || '{}')
 })
-
 // AI对话相关逻辑
 const question = ref('')
 const messages = ref([])
@@ -113,51 +65,52 @@ const loading = ref(false)
 const chatContainer = ref(null)
 
 const sendQuestion = async () => {
+  if (!question.value.trim()) return;
+  loading.value = true
+
+  const token = localStorage.getItem('token')
+  // 添加用户消息
+  messages.value.push({
+    role: 'user',
+    content: question.value,
+    timestamp: new Date().toLocaleTimeString()
+  })
+
   try {
-    loading.value = true;
-
-    // 打印 Token
-    const token = localStorage.getItem('token');
-    console.log('Token:', token);
-    // 添加用户消息
-    messages.value.push({
-      role: 'user',
-      content: question.value,
-      timestamp: new Date().toLocaleTimeString()
-    });
-
-    // 发送请求
-    // const response = await axios.post(`${import.meta.env.VITE_BASE_URL}/ai/ask`, { question: question.value },
-    const response = await axios.post(`http://localhost:8080/ai/ask`, { question: question.value },
-        {
+    const res = await request.post('/ai/ask', { question: question.value }, {
       headers: {
         'Authorization': `Bearer ${token}`
       }
-    });
-    console.log('Response Data:', response.data);
+    })
 
-    // 处理成功响应
-    if (response.data.code === 200) {
+    if (res.code === '200') {
       messages.value.push({
         role: 'assistant',
-        content: response.data.data,
+        content: res.data,
         timestamp: new Date().toLocaleTimeString()
-      });
+      })
     } else {
-      throw new Error(response.data.msg || '服务异常');
+      ElMessage.error(res.msg || '服务异常')
+      messages.value.push({
+        role: 'error',
+        content: `请求失败：${res.msg || '服务异常'}`,
+        timestamp: new Date().toLocaleTimeString()
+      })
     }
   } catch (error) {
+    ElMessage.error(error.message || 'AI服务异常')
     messages.value.push({
       role: 'error',
       content: `请求失败：${error.message}`,
       timestamp: new Date().toLocaleTimeString()
-    });
+    })
   } finally {
-    loading.value = false;
-    question.value = '';
-    scrollToBottom();
+    loading.value = false
+    question.value = ''
+    scrollToBottom()
   }
-};
+}
+
 
 const newChat = async () => {
   try {
