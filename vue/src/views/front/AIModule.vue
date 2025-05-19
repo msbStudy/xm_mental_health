@@ -75,7 +75,6 @@ const sendQuestion = async () => {
     content: question.value,
     timestamp: new Date().toLocaleTimeString()
   })
-
   try {
     const res = await request.post('/ai/ask', { question: question.value }, {
       headers: {
@@ -111,16 +110,6 @@ const sendQuestion = async () => {
   }
 }
 
-
-const newChat = async () => {
-  try {
-    await axios.post('/ai/new')
-    messages.value = []
-    ElMessage.success('已开启新对话')
-  } catch (error) {
-    ElMessage.error('重置对话失败')
-  }
-}
 
 const scrollToBottom = () => {
   nextTick(() => {
