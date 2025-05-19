@@ -8,6 +8,8 @@ import { ElementPlusResolver } from 'unplugin-vue-components/resolvers'
 import ElementPlus from 'unplugin-element-plus/vite'
 
 // https://vitejs.dev/config/
+
+//配置实现了 ElementPlus 的按需加载和样式定制
 export default defineConfig({
   plugins: [
     vue(),
@@ -15,6 +17,7 @@ export default defineConfig({
     ElementPlus({
       useSource: true,
     }),
+      //AutoImport 和 Components 插件自动导入 ElementPlus 组件和相关 API
     AutoImport({
       resolvers: [ElementPlusResolver({ importStyle: 'sass' })],
     }),

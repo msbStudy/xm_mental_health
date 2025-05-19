@@ -21,6 +21,7 @@ const data = reactive({
   propagateData: {}
 })
 
+//主页文章浏览数显示
 const loadPropagate = () => {
   data.propagateId = router.currentRoute.value.query.id
   request.get('/propagate/selectById/' + data.propagateId).then(res => {

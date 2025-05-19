@@ -180,6 +180,7 @@ const loadSideshow = () => {
     }
   })
 }
+//展示浏览量最高的三个文章
 const loadPropagate = () => {
   request.get('/propagate/selectTop3').then(res => {
     if (res.code === '200') {
