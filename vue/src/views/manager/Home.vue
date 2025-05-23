@@ -83,6 +83,7 @@ onMounted(() => {
   loadPie()
 })
 
+//折线图
 const loadLine = () => {
   request.get('/statistics/line').then(res => {
     if (res.code === '200') {
@@ -96,6 +97,7 @@ const loadLine = () => {
     }
   })
 }
+//柱状图
 const loadBar = () => {
   request.get('/statistics/bar').then(res => {
     if (res.code === '200') {
@@ -109,6 +111,7 @@ const loadBar = () => {
     }
   })
 }
+//饼状图
 const loadPie = () => {
   request.get('/statistics/pie').then(res => {
     if (res.code === '200') {

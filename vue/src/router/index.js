@@ -4,7 +4,7 @@ import AIModule from '@/views/front/AIModule.vue'
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
-    { path: '/', redirect: '/manager/home' },
+    { path: '/', redirect: '/login' },
     {
       path: '/manager',
       component: () => import('@/views/Manager.vue'),
